@@ -59,8 +59,8 @@ Perfect for keeping track of pack health, prop condition, and flight notes betwe
 
 **Example log file:**
 
-    2025-08-16 05:44 | Pack: 3 (Bad) | Prop: 5146 (Chipped) | Note: Wobbly
-    2025-08-16 05:58 | Pack: 4 (Good) | Prop: 5040 (New) | Note: Smooth
+      2026-09-12 02:38 | Pack: 1 (Bad) | Prop: 8040 (Damaged) | Note: Tuned
+      2026-09-12 02:40 | Pack: 11 (Bad) | Prop: 5040 (Damaged) | Note: Smooth
 
 ---
 
