@@ -1,16 +1,15 @@
 -- =========================================================================
--- ELRS Lost Model Finder (Geiger Style) - TX16S MKII Color Edition
+-- ELRS Lost Model Finder (Geiger Style) - Color Edition
 -- =========================================================================
 -- Original Script by: iamsunilchahal
 -- Original Repository: https://github.com/iamsunilchahal/edgetx-lua-scripts-bw
 --
--- Modified & Optimized for: RadioMaster TX16S MKII (480x272 Color Screen)
--- Modified by: Mauricio Gomez / CrashOverr
+-- Modified & Optimized for: Color Screens
+-- Modified by: Mauricio Gomez / CrashOverr and Kilrah
 -- Modifications made:
 --   - Full color UI with dynamic signal strength gradient (Red -> Yellow -> Green)
 --   - Enlarged typography (XXLSIZE/DBLSIZE) for better visibility at a distance
---   - Spanish translation for the tip message only
---   - Layout completely redesigned for 480x272 resolution
+--   - Layout completely redesigned for color screens
 --
 -- License: Same as original repository (Please check original repo for details)
 -- =========================================================================
@@ -18,10 +17,6 @@
 local lastBeep = 0
 local avg = -120
 local have = { rssi=false, snr=false, rql=false }
-
--- Screen configuration for TX16S (480x272)
-local W = 480
-local H = 272
 
 local function readSignal()
     -- Prefer 1RSS (CRSF dBm), else RSNR (dB), else RQly (%)
@@ -71,21 +66,21 @@ local function run_func(event)
   end
 
   -- ==========================================
-  -- UI DRAWING (Optimized for 480x272 Color)
+  -- UI DRAWING
   -- ==========================================
   lcd.clear(BLACK) -- Dark background
   
   local color = getSignalColor(strength)
 
   -- Title
-  lcd.drawText(W/2, 10, "ELRS FINDER", CENTER + DBLSIZE + WHITE)
+  lcd.drawText(LCD_W/2, 10, "ELRS FINDER", CENTER + DBLSIZE + WHITE)
 
   -- Main value (Raw and type)
   local mainText = string.format("%d %s", raw, kind)
-  lcd.drawText(W/2, 55, mainText, CENTER + XXLSIZE + color)
+  lcd.drawText(LCD_W/2, 55, mainText, CENTER + XXLSIZE + color)
 
   -- Giant progress bar
-  local barX, barY, barW, barH = 40, 145, 400, 50
+  local barX, barY, barW, barH = LCD_W/12, LCD_H/2, LCD_W-2*LCD_W/12, LCD_H*0.2
   local borderColor = GREY
   lcd.drawRectangle(barX, barY, barW, barH, borderColor)
   
@@ -97,15 +92,15 @@ local function run_func(event)
   -- Percentage inside the bar
   local pctText = string.format("%d%%", strength)
   local txtColor = (strength > 15) and BLACK or WHITE
-  lcd.drawText(W/2, barY + 12, pctText, CENTER + DBLSIZE + txtColor)
+  lcd.drawText(LCD_W/2, barY + barH/6, pctText, CENTER + DBLSIZE + txtColor)
 
   -- Statistics at the bottom
-  lcd.drawText(40, 220, "Src: " .. kind, SMLSIZE + LIGHTGREY)
-  lcd.drawText(W/2, 220, "Avg dBm est: " .. string.format("%.1f", avg), CENTER + SMLSIZE + LIGHTGREY)
-  lcd.drawText(W - 40, 220, "Raw: " .. raw, RIGHT + SMLSIZE + LIGHTGREY)
+  lcd.drawText(LCD_W/12, barY + barH + 5, "Src: " .. kind, SMLSIZE + LIGHTGREY)
+  lcd.drawText(LCD_W/2, barY + barH + 5, "Avg dBm est: " .. string.format("%.1f", avg), CENTER + SMLSIZE + LIGHTGREY)
+  lcd.drawText(LCD_W-LCD_W/12 ,barY + barH + 5, "Raw: " .. raw, RIGHT + SMLSIZE + LIGHTGREY)
 
-  -- Tip message in Spanish
-  lcd.drawText(W/2, 250, "Tip: Lower TX power as you get close.", CENTER + SMLSIZE + GREY)
+  -- Tip message
+  lcd.drawText(LCD_W/2, LCD_H*0.8, "Tip: Lower TX power as you get close.", CENTER + GREY)
 
   return 0
 end
